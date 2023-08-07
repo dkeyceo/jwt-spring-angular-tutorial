@@ -27,4 +27,9 @@ public class Role {
 	@Enumerated
 	private RoleName roleName;
 	
+	public Role(@NotNull RoleName roleName) {
+		this.roleName = roleName;
+	}
+	
+	
 }
