@@ -52,7 +52,7 @@ public class AuthController {
     @Autowired
     JwtProvider jwtProvider;
 
-    @PostMapping("/newUser")
+    @PostMapping("/create")
     public ResponseEntity<?> newUser(@Valid @RequestBody NewUserDto newUserDto, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Message("invalid email"), HttpStatus.BAD_REQUEST);

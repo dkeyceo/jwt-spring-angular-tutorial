@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/products")
 @CrossOrigin(origins = "*")
 public class ProductController {
 
     @Autowired
     ProductService productService;
 
-    @GetMapping("/lista")
+    @GetMapping("/list")
     public ResponseEntity<List<Product>> list(){
         List<Product> list = productService.list();
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/details/{id}")
     public ResponseEntity<Product> getById(@PathVariable("id") int id){
         if(!productService.existsById(id))
             return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
@@ -35,7 +35,7 @@ public class ProductController {
         return new ResponseEntity(producto, HttpStatus.OK);
     }
 
-    @GetMapping("/detailname/{name}")
+    @GetMapping("/detailsname/{name}")
     public ResponseEntity<Product> getByName(@PathVariable("name") String name){
         if(!productService.existsByName(name))
             return new ResponseEntity(new Message("no exists"), HttpStatus.NOT_FOUND);
