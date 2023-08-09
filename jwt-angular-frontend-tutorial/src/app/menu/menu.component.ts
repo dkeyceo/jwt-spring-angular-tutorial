@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TokenService } from '../services/token.service';
 
 @Component({
   selector: 'app-menu',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
-  constructor() { }
+  isLogged = false;
 
-  ngOnInit(): void {
+  constructor(private tokenService: TokenService) { }
+
+  ngOnInit() {
+    if (this.tokenService.getToken()) {
+      this.isLogged = true;
+    } else {
+      this.isLogged = false;
+    }
+  }
+
+  onLogout(): void {
+    this.tokenService.logout();
+    window.location.reload();
   }
 
 }

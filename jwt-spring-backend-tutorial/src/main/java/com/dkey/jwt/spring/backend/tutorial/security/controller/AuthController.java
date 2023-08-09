@@ -55,7 +55,7 @@ public class AuthController {
     @PostMapping("/create")
     public ResponseEntity<?> newUser(@Valid @RequestBody NewUserDto newUserDto, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message("invalid email"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("there are errors!"), HttpStatus.BAD_REQUEST);
         if(userService.existsByUsername(newUserDto.getUsername()))
             return new ResponseEntity(new Message("username exists"), HttpStatus.BAD_REQUEST);
         if(userService.existsByEmail(newUserDto.getEmail()))
