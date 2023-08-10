@@ -13,6 +13,7 @@ import { NewProductComponent } from './product/new-product/new-product.component
 import { EditProductComponent } from './product/edit-product/edit-product.component';
 import { ListProductComponent } from './product/list-product/list-product.component';
 import { DetailsProductComponent } from './product/details-product/details-product.component';
+import { interceptorProvider } from './interceptors/prod-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { DetailsProductComponent } from './product/details-product/details-produ
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [interceptorProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
