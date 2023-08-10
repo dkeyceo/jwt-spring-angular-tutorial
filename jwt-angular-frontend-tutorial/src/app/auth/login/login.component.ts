@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           timeOut: 3000, positionClass: 'toast-top-center'
         });
         */
-        // this.router.navigate(['/']);
+        this.router.navigate(['/']);
       },
       err => {
         this.isLogged = false;

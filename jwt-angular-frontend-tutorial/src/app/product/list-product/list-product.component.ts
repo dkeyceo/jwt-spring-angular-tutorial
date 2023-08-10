@@ -22,13 +22,12 @@ export class ListProductComponent implements OnInit {
 
   ngOnInit() {
     this.getProducts();
-    /* this.roles = this.tokenService.getAuthorities();
+    this.roles = this.tokenService.getAuthorities();
     this.roles.forEach(rol => {
       if (rol === 'ROLE_ADMIN') {
         this.isAdmin = true;
       }
     });
-    */
   }
 
   getProducts(): void {

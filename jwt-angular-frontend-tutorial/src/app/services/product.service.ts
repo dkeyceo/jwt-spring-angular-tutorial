@@ -17,7 +17,7 @@ export class ProductService {
   }
 
   public details(id: number): Observable<Product> {
-    return this.httpClient.get<Product>(this.productURL + `detail/${id}`);
+    return this.httpClient.get<Product>(this.productURL + `details/${id}`);
   }
 
   public detailsName(name: string): Observable<Product> {
