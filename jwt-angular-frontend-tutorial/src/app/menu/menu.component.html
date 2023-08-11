@@ -14,13 +14,19 @@
       <li class="nav-item" *ngIf="isLogged">
         <a class="nav-link" routerLink="/list"><i class="far fa-list-alt"></i> List</a>
       </li>
-      <li class="nav-item" *ngIf="!isLogged">
-          <a class="nav-link"  routerLink="/login"><i class="fas fa-sign-in-alt"></i> Login</a>
-        </li>
-        <li class="nav-item" *ngIf="isLogged" (click)="onLogout()">
-          <a class="nav-link" style="cursor: pointer;"><i class="fas fa-door-open" ></i> Logout</a>
-        </li>
+      <li class="nav-item" *ngIf="isAdmin">
+        <a class="nav-link" routerLink="/new-product"><i class="fas fa-plus-circle"></i> New product</a>
+      </li>
 
     </ul>
+
+    <form class="form-inline my-2 my-lg-0">
+      <button *ngIf="!isLogged" class="btn btn-outline-success my-2 my-sm-0" routerLink="/login" type="submit">
+        <i class="fas fa-sign-in-alt"></i> Login</button>
+        <button *ngIf="isLogged" class="btn btn-outline-danger my-2 my-sm-0" (click)="onLogout()" type="reset">
+          <i class="fas fa-sign-in-alt"></i>
+          <i class="fas fa-door-open"></i> Logout</button>
+    </form>
+
   </div>
 </nav>
