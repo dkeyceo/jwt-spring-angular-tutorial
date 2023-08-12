@@ -17,7 +17,6 @@ export class RegisterComponent implements OnInit {
   email: string;
   password: string;
   errMessage: string;
-  isLogged = false;
 
   constructor(
     private tokenService: TokenService,
@@ -27,9 +26,6 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this.tokenService.getToken()) {
-      this.isLogged = true;
-    }
   }
 
   onRegister(): void {

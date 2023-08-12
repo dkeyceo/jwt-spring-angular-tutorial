@@ -11,12 +11,10 @@ import { TokenService } from 'src/app/services/token.service';
 })
 export class LoginComponent implements OnInit {
 
-  isLogged = false;
-  isLoginFail = false;
+
   loginUser: LoginUser;
   username: string;
   password: string;
-  roles: string[] = [];
   errMessage: string;
 
   constructor(
@@ -43,7 +41,6 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       },
       err => {
-        this.isLogged = false;
         this.errMessage = err.error.message;
         /*
         this.toastr.error(this.errMsj, 'Fail', {
