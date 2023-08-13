@@ -5,10 +5,14 @@ import com.dkey.jwt.spring.backend.tutorial.dto.ProductDto;
 import com.dkey.jwt.spring.backend.tutorial.entity.Product;
 import com.dkey.jwt.spring.backend.tutorial.service.ProductService;
 
+import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +25,7 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @ApiOperation("Get list of products")
     @GetMapping("/list")
     public ResponseEntity<List<Product>> list(){
         List<Product> list = productService.list();
@@ -35,6 +40,7 @@ public class ProductController {
         return new ResponseEntity(producto, HttpStatus.OK);
     }
 
+    @ApiIgnore
     @GetMapping("/detailsname/{name}")
     public ResponseEntity<Product> getByName(@PathVariable("name") String name){
         if(!productService.existsByName(name))
@@ -43,6 +49,7 @@ public class ProductController {
         return new ResponseEntity(producto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<?> create(@RequestBody ProductDto productDto){
        if(StringUtils.isBlank(productDto.getName()))
@@ -56,6 +63,7 @@ public class ProductController {
         return new ResponseEntity(new Message("product created"), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable("id")int id, @RequestBody ProductDto productDto){
         if(!productService.existsById(id))
@@ -74,6 +82,7 @@ public class ProductController {
         return new ResponseEntity(new Message("product is updated"), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id")int id){
         if(!productService.existsById(id))
