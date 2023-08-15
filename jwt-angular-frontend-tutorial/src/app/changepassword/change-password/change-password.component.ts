@@ -41,13 +41,6 @@ export class ChangePasswordComponent implements OnInit {
     },
     err => {
       // this.toastrService.error(err.error.mensaje, 'FAIL', {timeOut: 3000, positionClass: 'toast-top-center'});
-      console.log(this.dto);
-      console.log(this.tokenPassword);
-      console.log(this.password);
-      console.log(this.confirmPassword);
-
-
-
       alert('Fail');
     }
     );
