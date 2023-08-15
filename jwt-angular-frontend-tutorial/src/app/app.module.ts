@@ -14,6 +14,8 @@ import { EditProductComponent } from './product/edit-product/edit-product.compon
 import { ListProductComponent } from './product/list-product/list-product.component';
 import { DetailsProductComponent } from './product/details-product/details-product.component';
 import { interceptorProvider } from './interceptors/prod-interceptor.service';
+import { SendEmailComponent } from './changepassword/send-email/send-email.component';
+import { ChangePasswordComponent } from './changepassword/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { interceptorProvider } from './interceptors/prod-interceptor.service';
     NewProductComponent,
     EditProductComponent,
     DetailsProductComponent,
-    ListProductComponent
+    ListProductComponent,
+    SendEmailComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
