@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ChangePasswordDto } from 'src/app/models/change-password-dto';
+import { EmailPasswordService } from 'src/app/services/email-password.service';
 
 @Component({
   selector: 'app-change-password',
@@ -7,9 +10,47 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChangePasswordComponent implements OnInit {
 
-  constructor() { }
+  password: string;
+  confirmPassword: string;
+  tokenPassword: string;
 
-  ngOnInit(): void {
+  dto: ChangePasswordDto;
+
+  constructor(
+    private emailPasswordService: EmailPasswordService,
+    // private toastrService: ToastrService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) { }
+
+  ngOnInit() {
+  }
+
+  onChangePassword(): void {
+    if(this.password !== this.confirmPassword) {
+      alert("Passwords not equal")
+      // this.toastrService.error('Las contraseñas no coinciden', 'FAIL', {timeOut: 3000, positionClass: 'toast-top-center'});
+      return;
+    }
+    this.tokenPassword = this.activatedRoute.snapshot.params['tokenPassword'];
+    this.dto = new ChangePasswordDto(this.password, this.confirmPassword, this.tokenPassword);
+    this.emailPasswordService.changePassword(this.dto).subscribe(
+      data => {
+        // this.toastrService.success(data.mensaje, 'OK', {timeOut: 3000, positionClass: 'toast-top-center'});
+        this.router.navigate(['/login']);
+    },
+    err => {
+      // this.toastrService.error(err.error.mensaje, 'FAIL', {timeOut: 3000, positionClass: 'toast-top-center'});
+      console.log(this.dto);
+      console.log(this.tokenPassword);
+      console.log(this.password);
+      console.log(this.confirmPassword);
+
+
+
+      alert('Fail');
+    }
+    );
   }
 
 }

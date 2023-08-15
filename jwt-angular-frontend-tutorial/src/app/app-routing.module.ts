@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [LoginGuard] },
 
   { path: 'sendemail', component: SendEmailComponent, canActivate: [LoginGuard] },
-  { path: 'changepassword/:tokenPassword', component: ChangePasswordComponent, canActivate: [LoginGuard] },
+  { path: 'change-password/:tokenPassword', component: ChangePasswordComponent, canActivate: [LoginGuard] },
 
   { path: 'list', component: ListProductComponent, canActivate: [ProdGuardService], data: { expectedRole: ['admin', 'user'] } },
   { path: 'details/:id', component: DetailsProductComponent, canActivate: [ProdGuardService], data: { expectedRole: ['admin', 'user'] }},
