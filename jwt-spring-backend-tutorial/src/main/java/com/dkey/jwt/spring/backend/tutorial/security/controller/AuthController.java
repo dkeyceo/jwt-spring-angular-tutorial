@@ -16,11 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dkey.jwt.spring.backend.tutorial.accountrecovery.dto.EmailValuesDto;
 import com.dkey.jwt.spring.backend.tutorial.dto.Message;
 import com.dkey.jwt.spring.backend.tutorial.security.dto.JwtDto;
 import com.dkey.jwt.spring.backend.tutorial.security.dto.LoginUserDto;
@@ -83,7 +85,7 @@ public class AuthController {
         JwtDto jwtDto = new JwtDto(jwt);
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
-    
+        
     @PostMapping("/refresh")
     public ResponseEntity<JwtDto> refresh(@RequestBody JwtDto jwtDto) throws ParseException{
         String token = jwtProvider.refresToken(jwtDto);

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+
+<body>
+	<h2>Recover password</h2>
+	<h3><span>Hello, </span><span th:text="${username}"></span></h3>
+	<h4>Click here to change your password</h4>
+	<a th:href="@{${url}}"><button>Link</button></a>
+</body>
+
+</html>
