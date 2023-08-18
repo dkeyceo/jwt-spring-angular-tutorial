@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +31,8 @@ import com.dkey.jwt.spring.backend.tutorial.security.enums.RoleName;
 import com.dkey.jwt.spring.backend.tutorial.security.jwt.JwtProvider;
 import com.dkey.jwt.spring.backend.tutorial.security.service.RoleService;
 import com.dkey.jwt.spring.backend.tutorial.security.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")

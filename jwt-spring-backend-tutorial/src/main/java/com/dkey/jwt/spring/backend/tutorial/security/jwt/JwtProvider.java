@@ -1,5 +1,6 @@
 package com.dkey.jwt.spring.backend.tutorial.security.jwt;
 
+import java.security.Key;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +20,11 @@ import com.nimbusds.jwt.JWTParser;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -39,16 +42,16 @@ public class JwtProvider {
 				.collect(Collectors.toList());
 		return Jwts.builder().setSubject(userPrincipal.getUsername()).claim("roles", roles).setIssuedAt(new Date())
 				.setExpiration(new Date(new Date().getTime() + expiration))
-				.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+				.signWith(getSecret(secret)).compact();
 	}
 
 	public String getUsernameFromToken(String token) {
-		return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
+		return Jwts.parserBuilder().setSigningKey(getSecret(secret)).build().parseClaimsJws(token).getBody().getSubject();
 	}
 
 	public boolean validateToken(String token) {
 		try {
-			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
+			Jwts.parserBuilder().setSigningKey(getSecret(secret)).build().parseClaimsJws(token);
 			return true;
 		} catch (MalformedJwtException e) {
 			log.error("token has wrong format");
@@ -66,7 +69,7 @@ public class JwtProvider {
 
 	public String refreshToken(JwtDto jwtDto) throws ParseException {
 		try {
-			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(jwtDto.getToken());
+			Jwts.parserBuilder().setSigningKey(getSecret(secret)).build().parseClaimsJws(jwtDto.getToken());
 		} catch (ExpiredJwtException e) {
 			JWT jwt = JWTParser.parse(jwtDto.getToken());
 			JWTClaimsSet claims = jwt.getJWTClaimsSet();
@@ -75,9 +78,14 @@ public class JwtProvider {
 
 			return Jwts.builder().setSubject(nombreUsuario).claim("roles", roles).setIssuedAt(new Date())
 					.setExpiration(new Date(new Date().getTime() + expiration))
-					.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+					.signWith(getSecret(secret)).compact();
 		}
 		return null;
 	}
+	
+	private Key getSecret(String secret){
+        byte[] secretBytes = Decoders.BASE64URL.decode(secret);
+        return Keys.hmacShaKeyFor(secretBytes);
+    }
 
 }

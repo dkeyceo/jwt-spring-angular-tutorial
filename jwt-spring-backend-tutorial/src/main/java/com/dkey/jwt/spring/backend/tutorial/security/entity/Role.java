@@ -1,14 +1,15 @@
 package com.dkey.jwt.spring.backend.tutorial.security.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+
 
 import com.dkey.jwt.spring.backend.tutorial.security.enums.RoleName;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,4 @@ public class Role {
 	public Role(@NotNull RoleName roleName) {
 		this.roleName = roleName;
 	}
-	
-	
 }

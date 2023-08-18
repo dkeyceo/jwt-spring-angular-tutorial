@@ -8,17 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.dkey.jwt.spring.backend.tutorial.security.entity.User;
 import com.dkey.jwt.spring.backend.tutorial.security.entity.UserPrincipal;
+import com.dkey.jwt.spring.backend.tutorial.security.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService{
 	
 	@Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) 
     		throws UsernameNotFoundException {
-        User user = userService.getByUsernameOrEmail(usernameOrEmail).get();
+        User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail).get();
         return UserPrincipal.build(user);
     }
 }

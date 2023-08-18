@@ -3,8 +3,6 @@ package com.dkey.jwt.spring.backend.tutorial.accountrecovery.controller;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +22,7 @@ import com.dkey.jwt.spring.backend.tutorial.dto.Message;
 import com.dkey.jwt.spring.backend.tutorial.security.entity.User;
 import com.dkey.jwt.spring.backend.tutorial.security.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController

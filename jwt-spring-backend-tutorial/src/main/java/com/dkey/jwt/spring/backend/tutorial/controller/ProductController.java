@@ -5,10 +5,10 @@ import com.dkey.jwt.spring.backend.tutorial.dto.ProductDto;
 import com.dkey.jwt.spring.backend.tutorial.entity.Product;
 import com.dkey.jwt.spring.backend.tutorial.service.ProductService;
 
+import io.micrometer.common.util.StringUtils;
 import io.swagger.annotations.ApiOperation;
 import springfox.documentation.annotations.ApiIgnore;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
