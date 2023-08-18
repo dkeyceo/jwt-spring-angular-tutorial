@@ -27,65 +27,57 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class JwtProvider {
-	
+
 	@Value("${jwt.secret}")
 	private String secret;
 	@Value("${jwt.expiration}")
 	private int expiration;
-	
+
 	public String generateToken(Authentication authentication) {
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 		List<String> roles = userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
-		return Jwts.builder()
-				.setSubject(userPrincipal.getUsername())
-				.claim("roles", roles)
-				.setIssuedAt(new Date())
+		return Jwts.builder().setSubject(userPrincipal.getUsername()).claim("roles", roles).setIssuedAt(new Date())
 				.setExpiration(new Date(new Date().getTime() + expiration))
-				.signWith(SignatureAlgorithm.HS512, secret.getBytes())
-				.compact();
+				.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
 	}
-	
+
 	public String getUsernameFromToken(String token) {
-		return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token)
-				.getBody().getSubject();
+		return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody().getSubject();
 	}
-	
+
 	public boolean validateToken(String token) {
 		try {
-            Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
-            return true;
-        }catch (MalformedJwtException e){
-            log.error("token has wrong format");
-        }catch (UnsupportedJwtException e){
-            log.error("token no supported");
-        }catch (ExpiredJwtException e){
-            log.error("token expired");
-        }catch (IllegalArgumentException e){
-            log.error("token is empty");
-        }catch (SignatureException e){
-            log.error("an error during sign");
-        }
-        return false;
+			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
+			return true;
+		} catch (MalformedJwtException e) {
+			log.error("token has wrong format");
+		} catch (UnsupportedJwtException e) {
+			log.error("token no supported");
+		} catch (ExpiredJwtException e) {
+			log.error("token expired");
+		} catch (IllegalArgumentException e) {
+			log.error("token is empty");
+		} catch (SignatureException e) {
+			log.error("an error during sign");
+		}
+		return false;
 	}
-	
-	public String refresToken(JwtDto jwtDto) throws ParseException {
+
+	public String refreshToken(JwtDto jwtDto) throws ParseException {
 		try {
 			Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(jwtDto.getToken());
-		}catch(ExpiredJwtException e) {
+		} catch (ExpiredJwtException e) {
 			JWT jwt = JWTParser.parse(jwtDto.getToken());
 			JWTClaimsSet claims = jwt.getJWTClaimsSet();
-			String username = claims.getSubject();
+			String nombreUsuario = claims.getSubject();
 			List<String> roles = (List<String>) claims.getClaim("roles");
-			return Jwts.builder()
-					.setSubject(username)
-					.claim("roles", roles)
-					.setIssuedAt(new Date())
+
+			return Jwts.builder().setSubject(nombreUsuario).claim("roles", roles).setIssuedAt(new Date())
 					.setExpiration(new Date(new Date().getTime() + expiration))
-					.signWith(SignatureAlgorithm.HS512, secret.getBytes())
-					.compact();
+					.signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
 		}
 		return null;
 	}
-	
+
 }
