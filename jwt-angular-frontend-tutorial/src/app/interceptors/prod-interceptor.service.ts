@@ -35,8 +35,11 @@ export class ProdInterceptorService {
           intReq = this.addToken(req, data.token);
           return next.handle(intReq);
         }));
-      } else {
+      } else if (err.status === 403){
         this.tokenService.logout();
+        return throwError(err);
+      }
+      else {
         return throwError(err);
       }
     }));

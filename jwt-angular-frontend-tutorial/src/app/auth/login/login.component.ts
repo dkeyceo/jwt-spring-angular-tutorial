@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LoginUser } from 'src/app/models/login-user';
 import { AuthService } from 'src/app/services/auth.service';
 import { TokenService } from 'src/app/services/token.service';
@@ -15,13 +16,14 @@ export class LoginComponent implements OnInit {
   loginUser: LoginUser;
   username: string;
   password: string;
+
   errMessage: string;
 
   constructor(
     private tokenService: TokenService,
     private authService: AuthService,
     private router: Router,
-    // private toastr: ToastrService
+    private toastr: ToastrService
   ) { }
 
   ngOnInit() {
@@ -33,21 +35,13 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.loginUser).subscribe(
       data => {
         this.tokenService.setToken(data.token);
-        /*
-        this.toastr.success('Bienvenido ' + data.nombreUsuario, 'OK', {
-          timeOut: 3000, positionClass: 'toast-top-center'
-        });
-        */
         this.router.navigate(['/']);
       },
       err => {
         this.errMessage = err.error.message;
-        /*
-        this.toastr.error(this.errMsj, 'Fail', {
+        this.toastr.error(this.errMessage, 'Fail', {
           timeOut: 3000,  positionClass: 'toast-top-center',
         });
-        */
-        console.log(this.errMessage);
       }
     );
   }

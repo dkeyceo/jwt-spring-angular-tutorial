@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.dkey.jwt.spring.backend.tutorial.dto.Message;
 
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
+
 @RestControllerAdvice
 public class RestControllerException {
 	@ExceptionHandler(Exception.class)
@@ -46,5 +51,11 @@ public class RestControllerException {
         e.getBindingResult().getAllErrors().forEach(err -> messages.add(err.getDefaultMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new Message(messages.stream().collect(Collectors.joining(","))));
+    }
+    
+    @ExceptionHandler(value = {MalformedJwtException.class, UnsupportedJwtException.class, IllegalArgumentException.class, SignatureException.class})
+    public ResponseEntity<Message> jwtException(JwtException e){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new Message(e.getMessage()));
     }
 }
