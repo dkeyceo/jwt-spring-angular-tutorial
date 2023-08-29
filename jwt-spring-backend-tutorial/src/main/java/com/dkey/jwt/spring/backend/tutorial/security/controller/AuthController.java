@@ -40,9 +40,6 @@ import jakarta.validation.Valid;
 public class AuthController {
 	
 	@Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
@@ -55,41 +52,17 @@ public class AuthController {
     JwtProvider jwtProvider;
 
     @PostMapping("/create")
-    public ResponseEntity<?> newUser(@Valid @RequestBody NewUserDto newUserDto, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message("there are errors!"), HttpStatus.BAD_REQUEST);
-        if(userService.existsByUsername(newUserDto.getUsername()))
-            return new ResponseEntity(new Message("username exists"), HttpStatus.BAD_REQUEST);
-        if(userService.existsByEmail(newUserDto.getEmail()))
-            return new ResponseEntity(new Message("email exists"), HttpStatus.BAD_REQUEST);
-        User user =
-                new User(newUserDto.getName(), newUserDto.getUsername(), newUserDto.getEmail(),
-                        passwordEncoder.encode(newUserDto.getPassword()));
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleService.getByRoleName(RoleName.ROLE_USER).get());
-        if(newUserDto.getRoles().contains("admin"))
-            roles.add(roleService.getByRoleName(RoleName.ROLE_ADMIN).get());
-        user.setRoles(roles);
-        userService.save(user);
-        return new ResponseEntity(new Message("user was created"), HttpStatus.CREATED);
+    public ResponseEntity<Message> newUser(@Valid @RequestBody NewUserDto newUserDto){
+        return ResponseEntity.ok(userService.save(newUserDto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUserDto loginUserDto, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message("wrong fields"), HttpStatus.BAD_REQUEST);
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUserDto.getUsername(), loginUserDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtProvider.generateToken(authentication);
-        JwtDto jwtDto = new JwtDto(jwt);
-        return new ResponseEntity(jwtDto, HttpStatus.OK);
+    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUserDto loginUserDto){
+        return ResponseEntity.ok(userService.login(loginUserDto));
     }
         
     @PostMapping("/refresh")
     public ResponseEntity<JwtDto> refresh(@RequestBody JwtDto jwtDto) throws ParseException{
-        String token = jwtProvider.refreshToken(jwtDto);
-        JwtDto jwt = new JwtDto(token);
-    	return new ResponseEntity(jwt, HttpStatus.OK);
+    	return ResponseEntity.ok(userService.refresh(jwtDto));
     }
 }

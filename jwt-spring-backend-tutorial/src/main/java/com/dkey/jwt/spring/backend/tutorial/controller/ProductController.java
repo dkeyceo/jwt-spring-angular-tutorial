@@ -7,6 +7,7 @@ import com.dkey.jwt.spring.backend.tutorial.service.ProductService;
 
 import io.micrometer.common.util.StringUtils;
 import io.swagger.annotations.ApiOperation;
+import jakarta.validation.Valid;
 import springfox.documentation.annotations.ApiIgnore;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,68 +29,35 @@ public class ProductController {
     @ApiOperation("Get list of products")
     @GetMapping("/list")
     public ResponseEntity<List<Product>> list(){
-        List<Product> list = productService.list();
-        return new ResponseEntity(list, HttpStatus.OK);
+        return ResponseEntity.ok(productService.list());
     }
 
     @GetMapping("/details/{id}")
     public ResponseEntity<Product> getById(@PathVariable("id") int id){
-        if(!productService.existsById(id))
-            return new ResponseEntity(new Message("no existe"), HttpStatus.NOT_FOUND);
-        Product producto = productService.getOne(id).get();
-        return new ResponseEntity(producto, HttpStatus.OK);
+        return ResponseEntity.ok(productService.getOne(id));
     }
 
     @ApiIgnore
     @GetMapping("/detailsname/{name}")
     public ResponseEntity<Product> getByName(@PathVariable("name") String name){
-        if(!productService.existsByName(name))
-            return new ResponseEntity(new Message("no exists"), HttpStatus.NOT_FOUND);
-        Product producto = productService.getByName(name).get();
-        return new ResponseEntity(producto, HttpStatus.OK);
+    	return ResponseEntity.ok(productService.getByName(name));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody ProductDto productDto){
-       if(StringUtils.isBlank(productDto.getName()))
-            return new ResponseEntity(new Message("name is required"), HttpStatus.BAD_REQUEST);
-        if(productDto.getPrice()==null || productDto.getPrice()<0 )
-            return new ResponseEntity(new Message("price must be greater than 0"), HttpStatus.BAD_REQUEST);
-        if(productService.existsByName(productDto.getName()))
-            return new ResponseEntity(new Message("name exists"), HttpStatus.BAD_REQUEST);
-        Product producto = new Product(productDto.getName(), productDto.getPrice());
-        productService.save(producto);
-        return new ResponseEntity(new Message("product created"), HttpStatus.OK);
+    public ResponseEntity<Message> create(@Valid @RequestBody ProductDto productDto){
+        return ResponseEntity.ok(productService.save(productDto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable("id")int id, @RequestBody ProductDto productDto){
-        if(!productService.existsById(id))
-            return new ResponseEntity(new Message("no exists"), HttpStatus.NOT_FOUND);
-        if(productService.existsByName(productDto.getName()) && productService.getByName(productDto.getName()).get().getId() != id)
-            return new ResponseEntity(new Message("name exists"), HttpStatus.BAD_REQUEST);
-        if(StringUtils.isBlank(productDto.getName()))
-            return new ResponseEntity(new Message("name is required"), HttpStatus.BAD_REQUEST);
-        if(productDto.getPrice()==null || productDto.getPrice()<0 )
-            return new ResponseEntity(new Message("price must be greater than 0"), HttpStatus.BAD_REQUEST);
-
-        Product product = productService.getOne(id).get();
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        productService.save(product);
-        return new ResponseEntity(new Message("product is updated"), HttpStatus.OK);
+    public ResponseEntity<Message> update(@PathVariable("id")int id, @Valid @RequestBody ProductDto productDto){        
+        return ResponseEntity.ok(productService.update(id, productDto));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id")int id){
-        if(!productService.existsById(id))
-            return new ResponseEntity(new Message("no exists"), HttpStatus.NOT_FOUND);
-        productService.delete(id);
-        return new ResponseEntity(new Message("product is deleted"), HttpStatus.OK);
+    public ResponseEntity<Message> delete(@PathVariable("id")int id){
+        return ResponseEntity.ok(productService.delete(id));
     }
-
-
 }

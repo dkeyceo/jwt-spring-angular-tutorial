@@ -13,13 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewUserDto {
-	@NotBlank
+	@NotBlank(message="name is required")
     private String name;
-    @NotBlank
+	@NotBlank(message="username is required")
     private String username;
-    @Email
+    @Email(message="email is invalid")
+    @NotBlank(message="email is required")
     private String email;
-    @NotBlank
+    @NotBlank(message="password is required")
     private String password;
     private Set<String> roles = new HashSet<>();
 }

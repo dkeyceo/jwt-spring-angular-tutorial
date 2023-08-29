@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductDto {
 
-    @NotBlank
+    @NotBlank(message="name of product is required")
     private String name;
-    @Min(0)
+    @Min(value = 0, message="price is required, and cannot be less than 0")
     private Float price;
 }

@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChangePasswordDto {
 	
-	@NotBlank
+	@NotBlank(message="Password is required")
 	private String password;
-	@NotBlank
+	@NotBlank(message="repeat password please")
 	private String confirmPassword;
-	@NotBlank
+	@NotBlank(message="token is required")
 	private String tokenPassword;
 }
