@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -14,7 +15,7 @@ export class EditProductComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private activatedRoute: ActivatedRoute,
-    // private toastr: ToastrService,
+    private toastr: ToastrService,
     private router: Router
   ) { }
 
@@ -25,8 +26,8 @@ export class EditProductComponent implements OnInit {
         this.product = data;
       },
       err => {
-        // this.toastr.error(err.error.mensaje, 'Fail', {timeOut: 3000,  positionClass: 'toast-top-center',});
-        this.router.navigate(['/']);
+        this.toastr.error(err.error.message, 'Fail', {timeOut: 3000,  positionClass: 'toast-top-center',});
+        // this.router.navigate(['/']);
       }
     );
   }
@@ -35,11 +36,11 @@ export class EditProductComponent implements OnInit {
     const id = this.activatedRoute.snapshot.params['id'];
     this.productService.update(id, this.product).subscribe(
       data => {
-        // this.toastr.success('Producto Actualizado', 'OK', {timeOut: 3000, positionClass: 'toast-top-center'});
+        this.toastr.success(data.message, 'OK', {timeOut: 3000, positionClass: 'toast-top-center'});
         this.router.navigate(['/list']);
       },
       err => {
-        // this.toastr.error(err.error.mensaje, 'Fail', {timeOut: 3000,  positionClass: 'toast-top-center', });
+        this.toastr.error(err.error.message, 'Fail', {timeOut: 3000,  positionClass: 'toast-top-center', });
         this.router.navigate(['/']);
       }
     );
